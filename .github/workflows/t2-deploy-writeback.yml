@@ -1,0 +1,161 @@
+name: t2-deploy-writeback
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  writeback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read wheel meta
+        id: meta
+        run: |
+          if [ ! -f .wheel-meta.json ]; then
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "No .wheel-meta.json on this push -- not a Hermes T2 build, skipping writeback."
+            exit 0
+          fi
+          echo "present=true" >> "$GITHUB_OUTPUT"
+          {
+            echo "wheel_id=$(jq -r '.wheel_id' .wheel-meta.json)"
+            echo "slug=$(jq -r '.slug' .wheel-meta.json)"
+            echo "project=$(jq -r '.project // .slug' .wheel-meta.json)"
+            echo "parent_t1_ref=$(jq -r '.parent_t1_ref' .wheel-meta.json)"
+            echo "money_target=$(jq -r '.money_target // ""' .wheel-meta.json)"
+            echo "primary_kw=$(jq -r '.primary_kw // ""' .wheel-meta.json)"
+            echo "intended_url=$(jq -r '.intended_url' .wheel-meta.json)"
+          } >> "$GITHUB_OUTPUT"
+          echo "cloud_host=$(cat .deploy-host | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
+          jq -c '.links // []' .wheel-meta.json > /tmp/links.json
+
+      - name: Deploy (netlify)
+        if: steps.meta.outputs.present == 'true' && steps.meta.outputs.cloud_host == 'netlify'
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          npm install -g netlify-cli
+          PROJECT="${{ steps.meta.outputs.project }}"
+          SID="$(netlify api listSites | grep -B5 "\"name\": \"$PROJECT\"" | grep -oE '"site_id": "[0-9a-f-]+"' | head -1 | grep -oE '[0-9a-f-]{36}' || true)"
+          if [ -z "$SID" ]; then
+            netlify sites:create --name "$PROJECT" --account-slug sites-au
+            SID="$(netlify api listSites | grep -B5 "\"name\": \"$PROJECT\"" | grep -oE '"site_id": "[0-9a-f-]+"' | head -1 | grep -oE '[0-9a-f-]{36}')"
+          fi
+          [ -n "$SID" ] || { echo "::error::could not resolve Netlify site id for '$PROJECT' in account sites-au"; exit 1; }
+          netlify deploy --prod --dir=. --site="$SID"
+
+      - name: Deploy (vercel)
+        if: steps.meta.outputs.present == 'true' && steps.meta.outputs.cloud_host == 'vercel'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          npm install -g vercel
+          PROJECT="${{ steps.meta.outputs.project }}"
+          DEP_URL="$(vercel deploy --prod --yes --token="$VERCEL_TOKEN" --scope=site-au --name="$PROJECT" | tail -1 | tr -d '\r')"
+          [ -n "$DEP_URL" ] || { echo "::error::vercel deploy produced no URL for '$PROJECT' in scope site-au"; exit 1; }
+          vercel alias set "$DEP_URL" "$PROJECT.vercel.app" --token="$VERCEL_TOKEN" --scope=site-au
+
+      - name: Deploy (cloudflare pages)
+        if: steps.meta.outputs.present == 'true' && steps.meta.outputs.cloud_host == 'cloudflare'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npm install -g wrangler
+          PROJECT="${{ steps.meta.outputs.project }}"
+          npx wrangler pages project create "$PROJECT" --production-branch=main || true
+          npx wrangler pages deploy . --project-name="$PROJECT" --branch=main --commit-dirty=true
+
+      - name: Poll live URL for HTTP 200 (evidence gate)
+        if: steps.meta.outputs.present == 'true'
+        id: verify
+        run: |
+          url="${{ steps.meta.outputs.intended_url }}"
+          code=0
+          for i in $(seq 1 20); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$url" || echo 000)
+            if [ "$code" = "200" ]; then
+              echo "live_url=$url" >> "$GITHUB_OUTPUT"
+              echo "http_code=200" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "http_code=$code" >> "$GITHUB_OUTPUT"
+          exit 1
+
+      - name: IndexNow submit
+        if: steps.meta.outputs.present == 'true' && success()
+        run: |
+          KEY_FILE="$(ls *.txt 2>/dev/null | grep -iE '^[0-9a-f]{32}\.txt$' | head -1 || true)"
+          if [ -z "$KEY_FILE" ]; then
+            echo "No IndexNow key .txt at repo root -- skipping submission."
+            exit 0
+          fi
+          KEY="$(basename "$KEY_FILE" .txt)"
+          url="${{ steps.verify.outputs.live_url }}"
+          host="$(echo "$url" | sed -E 's#https?://([^/]+).*#\1#')"
+          for ep in https://api.indexnow.org/indexnow https://www.bing.com/indexnow https://yandex.com/indexnow; do
+            curl -s -o /dev/null -m 20 "$ep?url=$url&key=$KEY&keyLocation=https://$host/$KEY.txt" || true
+          done
+          echo "IndexNow submitted for $url"
+
+      - name: Writeback (live confirmed)
+        if: steps.meta.outputs.present == 'true' && success()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          slug="${{ steps.meta.outputs.slug }}"
+          parent="${{ steps.meta.outputs.parent_t1_ref }}"
+          money="${{ steps.meta.outputs.money_target }}"
+          kw="${{ steps.meta.outputs.primary_kw }}"
+          host="${{ steps.meta.outputs.cloud_host }}"
+          live_url="${{ steps.verify.outputs.live_url }}"
+          wheel_id="${{ steps.meta.outputs.wheel_id }}"
+          rest="$SUPABASE_URL/rest/v1"
+          RETRY=(--retry 4 --retry-delay 3 --retry-all-errors)
+          auth=(-H "apikey: $SUPABASE_SERVICE_ROLE_KEY" -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY"                 -H "Content-Type: application/json" -H "Accept-Profile: deploy" -H "Content-Profile: deploy")
+
+          curl -sf "${RETRY[@]}" -X POST "$rest/cloud_properties"             "${auth[@]}" -H "Prefer: resolution=merge-duplicates,return=minimal"             -d @- <<JSON
+          {"slug":"$slug","money_target":"$money","cloud_host":"$host","intended_url":"$live_url",
+           "live_url":"$live_url","primary_kw":"$kw","tier":"T2","links_up_to":"$parent",
+           "method":"cloudlink-t2-wheel","status":"live"}
+          JSON
+
+          curl -sf "${RETRY[@]}" -X DELETE "$rest/link_edges?source_ref=eq.$slug&source_feed=eq.t2-wheel" "${auth[@]}"
+
+          jq -c --arg slug "$slug" --arg url "$live_url"             '[.[] | {source_url:$url, target_url:.target_url, source_type:"cloud", source_ref:$slug, target_type:"cloud", anchor:.anchor, rel:(.rel // "follow"), source_feed:"t2-wheel", first_seen: (now|strftime("%Y-%m-%d"))}]
+             | unique_by([.source_url, .target_url])'             /tmp/links.json > /tmp/link_edges.json
+
+          if [ "$(jq 'length' /tmp/link_edges.json)" -gt 0 ]; then
+            curl -sf "${RETRY[@]}" -X POST "$rest/link_edges" "${auth[@]}" -H "Prefer: resolution=merge-duplicates,return=minimal"               -d @/tmp/link_edges.json
+          fi
+
+          row=$(curl -sf "${RETRY[@]}" "$rest/t2_build_queue?id=eq.$wheel_id&select=built_slugs,feeder_count" "${auth[@]}")
+          built=$(echo "$row" | jq -c --arg s "$slug" '.[0].built_slugs + [$s] | unique')
+          feeder_count=$(echo "$row" | jq -r '.[0].feeder_count')
+          count=$(echo "$built" | jq 'length')
+          if [ "$count" -ge "$feeder_count" ]; then
+            status="done"; done_at_clause=","done_at":"$(date -u +%Y-%m-%dT%H:%M:%SZ)""
+          else
+            status="in_progress"; done_at_clause=""
+          fi
+          curl -sf "${RETRY[@]}" -X PATCH "$rest/t2_build_queue?id=eq.$wheel_id" "${auth[@]}" -H "Prefer: return=minimal"             -d "{"built_slugs":$built,"status":"$status","error":null$done_at_clause}"
+
+      - name: Mark failed
+        if: steps.meta.outputs.present == 'true' && failure()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          wheel_id="${{ steps.meta.outputs.wheel_id }}"
+          code="${{ steps.verify.outputs.http_code }}"
+          reason="${code:-deploy step failed, see Action run log}"
+          curl -s --retry 4 --retry-delay 3 --retry-all-errors -w '\nHTTP=%{http_code}\n' -X PATCH "$SUPABASE_URL/rest/v1/t2_build_queue?id=eq.$wheel_id"             -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY"             -H "Content-Type: application/json" -H "Content-Profile: deploy" -H "Prefer: return=minimal"             -d "{"status":"failed","error":"$reason"}" || true

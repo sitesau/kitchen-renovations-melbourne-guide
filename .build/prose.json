@@ -1,0 +1,90 @@
+{
+  "kicker": "Kitchen Renovation Guide",
+  "h1_tail": "A Melbourne Homeowner's Guide",
+  "meta_hook": "Compare VBA-registered renovators, fixed-price contracts and custom cabinetry options.",
+  "takeaway": "Kitchen renovations in Melbourne typically involve engaging a Victorian Building Authority registered renovator who handles design, demolition, cabinetry, plumbing, electrical and installation under a fixed-price written contract. Period homes, post-war brick veneers and apartments each call for different approaches, from made-to-measure joinery to compact layouts with acoustic underlay. A free in-home design consultation lets you scope the project, agree a written quote and confirm timelines before any work begins.",
+  "lead_tail": "across Melbourne's period terraces, post-war brick homes and apartments, each project demands a renovator matched to the home's age, layout and your budget.",
+  "stats": [
+    {"value": "VBA-registered", "label": "renovators across Melbourne"},
+    {"value": "Fixed-price", "label": "written contracts"},
+    {"value": "Same-day", "label": "reply where possible"}
+  ],
+  "sections": [
+    {
+      "h2": "Setting a Realistic Renovation Budget",
+      "html": "<p>Before contacting a renovator, clarify what you want to achieve and how much you can comfortably spend. A full kitchen renovation covers new cabinetry, benchtops, plumbing and electrical updates, a splashback and soft-close hardware, all managed end to end on a fixed-price written contract. Smaller refreshes, such as replacing cabinet doors or installing a new benchtop, cost considerably less and can often be done without a full strip-out.</p><p>Request a free in-home design consultation so the renovator can measure the space, discuss your style preferences and provide a written quote. A same-day reply is possible in many cases. This is also your chance to flag any structural changes, such as removing a wall between the kitchen and living area, which may require a building permit and engineering certification.</p><p>Prioritise your spending on elements that are difficult or costly to change later. Plumbing and electrical rough-in, solid cabinetry carcasses and durable benchtop materials are worth investing in from the start. Cosmetic touches such as door handles, paint colours and pendant lighting can be refreshed later as trends or your budget shifts.</p><ul><li><strong>Full renovation:</strong> new cabinetry, benchtops, splashback, plumbing, electrical and installation</li><li><strong>Cabinetry refresh:</strong> replacement doors, new benchtop or updated hardware only</li><li><strong>Apartment kitchen:</strong> compact layouts, owners corporation approval and acoustic underlay</li></ul>"
+    },
+    {
+      "h2": "Custom Cabinetry Versus Flat-Pack Joinery",
+      "html": "<p>Melbourne's period terraces, Edwardians and Californian bungalows suit made-to-measure joinery rather than a standard flat-pack run. A cabinetmaker whose finish style fits your home can match existing skirtings, architraves and period detailing that off-the-shelf units cannot replicate. Custom cabinetry also allows you to work around uneven walls, original cornices and non-standard ceiling heights common in older Melbourne housing stock.</p><p>For newer homes and apartments, semi-custom or flat-pack options can deliver a clean modern look at a lower cost. The trade-off is flexibility: standard unit sizes may not maximise every centimetre of an unusual floor plan. Weigh durability, finish quality and warranty terms when comparing quotes, and ask whether the cabinetry is manufactured locally or imported. For a broader overview of <a href=\"https://pressranger.com/media-rooms/melbourne-kitchen-renovations\">Kitchen Renovations</a> services and matching to the right renovator, the parent guide walks through the full process.</p>"
+    },
+    {
+      "h2": "Period Homes, Post-War Brick and Apartment Kitchens",
+      "html": "<p>Different Melbourne housing types call for different renovation strategies. Period homes, including Victorian terraces and Edwardian villas, often need demolition of outdated fit-outs, structural repairs to bearers and joists, and careful integration of modern appliances behind heritage-style facades. Post-war brick veneer homes generally have straightforward rectangular kitchens that accommodate standard cabinetry runs but may need updated electrical and plumbing to meet current standards.</p><p>Apartment kitchens add another layer of complexity. Owners corporation documentation and approval are typically required before construction begins, and compact layouts demand space-efficient solutions such as integrated appliances, pull-out pantries and slimline cabinetry. Acoustic underlay may be necessary to meet strata noise requirements. The right renovator for a one-bedroom Brunswick apartment is rarely the same tradesperson you would choose for a four-bedroom family home in Glen Waverley.</p>"
+    },
+    {
+      "h2": "Working With a VBA-Registered Renovator",
+      "html": "<p>A Victorian Building Authority registered renovator is licensed to carry out domestic building work in Victoria and is required to provide a written contract for projects above the regulated threshold. HIA and Master Builders accreditation are additional indicators of trade competence and adherence to industry standards. When a renovator operates on a fixed-price written contract, you have cost certainty before demolition begins, reducing the risk of budget blowouts.</p><p>The matched renovator typically handles design, manufacture, demolition and installation end to end. Confirm what is included in the contract: cabinetry supply and install, benchtop material, plumbing reconnection, electrical work, splashback tiling, rubbish removal and any building permits. A free in-home consult lets you compare scope and price across quotes before committing.</p>"
+    },
+    {
+      "h2": "Who This Guide Applies To",
+      "html": "<p>This guide is written for Melbourne homeowners and investors planning a kitchen renovation, whether that is a full strip-out of a period terrace in Hawthorn, a cabinetry upgrade in a post-war home in Essendon, or a compact apartment kitchen in Footscray. It is also relevant for property owners in newer suburbs such as Doncaster, Ringwood and Werribee who want to understand what a fixed-price renovation contract should cover and how to evaluate a renovator's credentials before signing.</p><p>Because matching services connect you with VBA-registered renovators at no cost, they are worth using even if you already have a shortlist of builders. Comparing quotes, finish styles and timelines side by side is the most effective way to ensure the renovator you choose is the right fit for your home and budget. You can explore the full <a href=\"https://pressranger.com/media-rooms/melbourne-kitchen-renovations\">kitchen renovations Melbourne</a> matching process through the parent resource.</p>"
+    }
+  ],
+  "table": {
+    "caption": "Kitchen cabinetry options compared",
+    "headers": ["Option", "Best suited to", "Key consideration"],
+    "rows": [
+      ["Custom joinery", "Period homes and unusual layouts", "Made to measure; matches existing detailing"],
+      ["Semi-custom", "Most family homes", "Flexible sizing with standard finishes"],
+      ["Flat-pack", "Budget refreshes and modern apartments", "Lower cost; limited non-standard sizes"]
+    ]
+  },
+  "howto": [
+    {"name": "Define your scope", "text": "List what stays and what goes, from cabinetry and benchtops to plumbing and electrical upgrades."},
+    {"name": "Set your budget", "text": "Decide on a total spend range so the renovator can tailor materials and finishes to your ceiling."},
+    {"name": "Book an in-home consult", "text": "Arrange a free design consultation so the renovator can measure the space and discuss your style."},
+    {"name": "Compare written quotes", "text": "Review fixed-price contracts side by side, checking what is included in each scope of work."},
+    {"name": "Confirm timelines and permits", "text": "Agree start and completion dates and confirm who handles building permits and owners corporation approval."}
+  ],
+  "faq": [
+    {"q": "Do I need a VBA-registered renovator for a kitchen renovation?", "a": "In Victoria, domestic building work above the regulated threshold must be carried out by a VBA-registered builder. A written contract is also required for projects above that threshold, giving you cost certainty and access to dispute resolution through the Victorian Building Authority."},
+    {"q": "What does a fixed-price kitchen renovation contract include?", "a": "A fixed-price written contract should cover cabinetry supply and installation, benchtop material, plumbing and electrical work, splashback tiling, demolition, rubbish removal and any required permits. Confirm every item is listed before signing, and check whether provisional sums or prime cost items are included for materials you have not yet finalised."},
+    {"q": "Can I renovate the kitchen in my apartment?", "a": "Yes, but you will typically need owners corporation approval before construction begins. Compact layouts, integrated appliances and acoustic underlay are common considerations for apartment kitchen renovations."}
+  ],
+  "about": [
+    {"name": "Renovation", "sameAs": "https://en.wikipedia.org/wiki/Renovation"},
+    {"name": "Kitchen", "sameAs": "https://en.wikipedia.org/wiki/Kitchen"},
+    {"name": "Cabinetry", "sameAs": "https://en.wikipedia.org/wiki/Cabinetry"},
+    {"name": "Home improvement", "sameAs": "https://en.wikipedia.org/wiki/Home_improvement"},
+    {"name": "General contractor", "sameAs": "https://en.wikipedia.org/wiki/General_contractor"},
+    {"name": "Building code", "sameAs": "https://en.wikipedia.org/wiki/Building_code"},
+    {"name": "Tradesperson", "sameAs": "https://en.wikipedia.org/wiki/Tradesperson"}
+  ],
+  "mentions": [
+    {"name": "Bathroom", "sameAs": "https://en.wikipedia.org/wiki/Bathroom"},
+    {"name": "Garage door", "sameAs": "https://en.wikipedia.org/wiki/Garage_door"},
+    {"name": "Retaining wall", "sameAs": "https://en.wikipedia.org/wiki/Retaining_wall"}
+  ],
+  "authorities": [
+    {"name": "Housing Industry Association", "url": "https://hia.com.au"},
+    {"name": "Master Builders Australia", "url": "https://www.masterbuilders.com.au"},
+    {"name": "ASIC Moneysmart: Renovating", "url": "https://moneysmart.gov.au"}
+  ],
+  "claims": [
+    {"claim": "VBA-registered renovators matched to project size and style", "source": "money page"},
+    {"claim": "Fixed-price written contracts for full kitchen renovations", "source": "money page"},
+    {"claim": "Same-day reply where possible", "source": "money page"},
+    {"claim": "Free in-home design consultation", "source": "money page"},
+    {"claim": "Full kitchen renovation covers new cabinetry, benchtops, plumbing, electrical, splashback and soft-close hardware", "source": "money page"},
+    {"claim": "Period homes, post-war brick and apartments each call for different renovators", "source": "money page"},
+    {"claim": "Custom made-to-measure joinery suits period terraces, Edwardians and bungalows", "source": "money page"},
+    {"claim": "Owners corporation documentation required for apartment kitchens", "source": "money page"},
+    {"claim": "Acoustic underlay may be necessary for apartment kitchens", "source": "money page"},
+    {"claim": "HIA and Master Builders accredited renovators", "source": "money page"},
+    {"claim": "No fees for the matching service", "source": "money page"},
+    {"claim": "Domestic building work above the regulated threshold must be carried out by a VBA-registered builder in Victoria", "source": "https://hia.com.au"},
+    {"claim": "A written contract is required for building projects above the regulated threshold in Victoria", "source": "https://hia.com.au"}
+  ],
+  "scope": "This guide covers budget planning, cabinetry choices, period versus apartment kitchens and working with VBA-registered renovators across Melbourne."
+}

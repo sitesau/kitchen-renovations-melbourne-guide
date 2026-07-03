@@ -1,0 +1,17 @@
+{
+  "wheel_id": 23,
+  "slug": "melbourne-kitchen-renovations-mr-150",
+  "project": "kitchen-renovations-melbourne-guide",
+  "parent_t1_ref": "melbourne-kitchen-renovations-mr",
+  "money_target": "melbournekitchenreno.com.au",
+  "primary_kw": "kitchen renovations melbourne",
+  "intended_url": "https://kitchen-renovations-melbourne-guide.netlify.app/",
+  "links": [
+    {
+      "target_url": "https://pressranger.com/media-rooms/melbourne-kitchen-renovations",
+      "anchor": "Kitchen Renovations",
+      "rel": "follow",
+      "target_type": "pressranger"
+    }
+  ]
+}
